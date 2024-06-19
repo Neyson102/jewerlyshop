@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Каталог</h2>
+<div class="filters">
+    <form method="get" action="{{ url_for('catalog') }}">
+        <label for="category_id">Категорія:</label>
+        <select name="category_id" id="category_id">
+            <option value="">Всі категорії</option>
+            {% for category in categories %}
+            <option value="{{ category.id }}" {% if category.id == category_id|int %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="min_price">Ціна від:</label>
+        <input type="number" name="min_price" id="min_price" value="{{ min_price or '' }}" step="0.01" min="0" class="price-input">
+
+        <label for="max_price">Ціна до:</label>
+        <input type="number" name="max_price" id="max_price" value="{{ max_price or '' }}" step="0.01" min="0" class="price-input">
+
+        <button type="submit">Фільтрувати</button>
+    </form>
+</div>
+<div class="goods-grid">
+    {% for good in goods %}
+    <div class="good">
+        <img src="{{ url_for('static', filename='uploads/' ~ good.image) }}" alt="{{ good.name }}">
+        <h3>{{ good.name }}</h3>
+        <p>Ціна: {{ good.price }} грн</p>
+        <a href="{{ url_for('good_detail', good_id=good.id) }}" class="btn">Деталі</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

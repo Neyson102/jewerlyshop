@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Управління замовленнями</h2>
+<div class="filter-section">
+    <form method="get" action="{{ url_for('manage_orders') }}">
+        <label for="status">Фільтр за статусом:</label>
+        <select name="status" id="status" onchange="this.form.submit()">
+            <option value="all" {% if status_filter == 'all' %}selected{% endif %}>Всі</option>
+            <option value="new" {% if status_filter == 'new' %}selected{% endif %}>Новий</option>
+            <option value="shipped" {% if status_filter == 'shipped' %}selected{% endif %}>Відправлений</option>
+            <option value="delivered" {% if status_filter == 'delivered' %}selected{% endif %}>Доставлений</option>
+        </select>
+    </form>
+</div>
+<div class="manage-list">
+    <div class="orders-grid">
+        {% for order in orders %}
+        <div class="order-item">
+            <strong>Замовлення #{{ order.id }}</strong> <br><br>
+            <strong>Ім'я:</strong> {{ order.first_name }} {{ order.last_name }}<br>
+            <strong>Телефон:</strong> {{ order.phone }}<br>
+            <strong>Адреса:</strong> {{ order.address }}<br>
+            <strong>Дата: </strong> {{ order.created_at.strftime('%H:%M:%S') }}<br>
+            <strong>Спосіб оплати:</strong> {{ order.payment_method }}<br>
+            <strong>Загальна сума:</strong> {{ order.total_price }} грн<br><br>
+            <strong>Статус:</strong>
+            <form method="post" action="{{ url_for('update_order_status', order_id=order.id) }}">
+                <select name="status">
+                    <option value="new" {% if order.status == 'new' %}selected{% endif %}>Новий</option>
+                    <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>Відправлений</option>
+                    <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Доставлений</option>
+                </select>
+                <button type="submit" class="btn">Змінити статус</button>
+            </form>
+            <h4>Товари:</h4>
+            <ul>
+                {% for item in order.order_items %}
+                <li>{{ item.good.name }} - {{ item.quantity }} шт. - {{ item.good.price * item.quantity }} грн</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

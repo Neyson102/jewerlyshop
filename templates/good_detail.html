@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="good-detail">
+    <div class="good-image">
+        <img src="{{ url_for('static', filename='uploads/' ~ good.image) }}" alt="{{ good.name }}">
+    </div>
+    <div class="good-info">
+        <h2>{{ good.name }}</h2>
+        <p class="price">Ціна: {{ good.price }} грн</p>
+        <p>{{ good.description }}</p>
+        <form method="post" action="{{ url_for('add_to_cart', good_id=good.id) }}">
+            <button type="submit" class="btn">Додати в кошик</button>
+        </form>
+        <div class="reviews">
+            <h3>Відгуки</h3>
+            <ul>
+                {% for review in reviews %}
+                <li>
+                    <strong>{{ review.username }}</strong><br>
+                    Оцінка: {{ review.rating }}<br>
+                    Коментар: {{ review.comment }}
+                </li>
+                {% endfor %}
+            </ul>
+            <h3>Додати відгук</h3>
+            <form method="post" action="{{ url_for('good_detail', good_id=good.id) }}">
+                <label for="rating">Оцінка:</label>
+                <select id="rating" name="rating" required>
+                    <option value="5">★★★★★</option>
+                    <option value="4">★★★★☆</option>
+                    <option value="3">★★★☆☆</option>
+                    <option value="2">★★☆☆☆</option>
+                    <option value="1">★☆☆☆☆</option>
+                </select>
+                <label for="comment">Коментар:</label>
+                <textarea id="comment" name="comment" required></textarea>
+                <button type="submit" class="btn">Надіслати відгук</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

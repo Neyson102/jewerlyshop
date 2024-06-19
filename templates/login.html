@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Авторизація</h2>
+<form method="post" action="{{ url_for('login') }}">
+    <p><label for="username">Логін:</label>
+    <input type="text" id="username" name="username" required></p>
+    <p><label for="password">Пароль:</label>
+    <input type="password" id="password" name="password" required></p>
+    <button type="submit" class="btn">Увійти</button>
+</form>
+<p>Ще немає аккаунту? <a href="{{ url_for('register') }}">Реєстрація</a></p>
+{% endblock %}

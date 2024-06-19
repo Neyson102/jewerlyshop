@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ювелірний магазин</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="{{ url_for('catalog') }}" style="text-decoration: none; color: inherit;">Ювелірний магазин</a></h1>
+            <nav>
+                <ul>
+                    <a href="{{ url_for('catalog') }}">Каталог</a>
+                    {% if session.get('username') %}
+                        {% if session.get('role') == 'manager' %}
+                            <a href="{{ url_for('manage') }}">Управління</a>
+                            <a href="{{ url_for('manage_orders') }}">Замовлення</a>
+                            <a href="{{ url_for('cart') }}">Кошик</a>
+                        {% endif %}
+                        <a href="{{ url_for('logout') }}">Вийти</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">Авторизація</a>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="flashes">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+</body>
+</html>
